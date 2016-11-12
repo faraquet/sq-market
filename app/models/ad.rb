@@ -1,14 +1,18 @@
 class Ad < ApplicationRecord
   belongs_to :player
   belongs_to :product
+  has_one :deal
+
   before_validation :set_player
   before_validation :set_product
-  before_create :calculate_total
+  
   validate :player_must_have_enough_products,
            :price_should_be_50percents_max,
            :check_player_exist,
            :check_product_exist
 
+  before_create :calculate_total
+  
   def set_player
     @player = Player.find(player_id)
   end
