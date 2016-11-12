@@ -11,4 +11,8 @@ class YmlParser
     end
   end
 
+  def products
+    @data['products'] ? @data['products'] : @log.error('Products record not found in config!')
+  end
+  
 end

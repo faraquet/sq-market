@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Product.delete_all
+products = YmlParser.new.products
+  products.map { |key, value|
+    Product.create!(
+    title: key,
+    required_level: value['required_level'],
+    price: value['price']
+    )
+}
