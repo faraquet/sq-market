@@ -1,0 +1,2 @@
+class PlayerProduct < ApplicationRecord
+end
