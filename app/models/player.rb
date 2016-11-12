@@ -1,7 +1,6 @@
 class Player < ApplicationRecord
   has_one :stock
   has_many :ads
-  has_many :deals
   
   before_create :exp_calculate
   after_create :prepare

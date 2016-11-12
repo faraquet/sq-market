@@ -3,8 +3,7 @@ class Ad < ApplicationRecord
   belongs_to :product
   has_one :deal
 
-  before_validation :set_player
-  before_validation :set_product
+  before_validation :set_player, :set_product
   
   validate :player_must_have_enough_products,
            :price_should_be_50percents_max,

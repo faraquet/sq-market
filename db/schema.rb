@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161112220227) do
+ActiveRecord::Schema.define(version: 20161112233259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,10 +26,14 @@ ActiveRecord::Schema.define(version: 20161112220227) do
   end
 
   create_table "deals", force: :cascade do |t|
-    t.integer  "player_id"
-    t.integer  "ad_id"
+    t.integer  "product_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "quantity"
+    t.decimal  "price"
+    t.decimal  "total"
+    t.integer  "buyer_id"
+    t.integer  "seller_id"
   end
 
   create_table "player_products", force: :cascade do |t|
@@ -66,4 +70,6 @@ ActiveRecord::Schema.define(version: 20161112220227) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "deals", "players", column: "buyer_id"
+  add_foreign_key "deals", "players", column: "seller_id"
 end

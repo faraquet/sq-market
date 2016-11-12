@@ -2,10 +2,13 @@ first_names = ["Andy", "Max", "John", "George", "Oliver", "Jack"]
 last_names  = ["Smith", "Hill", "Adams", "Baker", "Davis", "Bowie"]
 players_count = 5
 
-Player.delete_all
-Stock.delete_all
-Product.delete_all
+Deal.delete_all
+Ad.delete_all
 PlayerProduct.delete_all
+Stock.delete_all
+Player.delete_all
+Product.delete_all
+
 
 Product.delete_all
 products = YmlParser.new.products
