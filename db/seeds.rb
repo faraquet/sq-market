@@ -1,10 +1,11 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+first_names = ["Andy", "Max", "John", "George", "Oliver", "Jack"]
+last_names  = ["Smith", "Hill", "Adams", "Baker", "Davis", "Bowie"]
+players_count = 5
+
+Player.delete_all
+Stock.delete_all
+Product.delete_all
+PlayerProduct.delete_all
 
 Product.delete_all
 products = YmlParser.new.products
@@ -13,5 +14,14 @@ products = YmlParser.new.products
     title: key,
     required_level: value['required_level'],
     price: value['price']
+    )
+}
+
+players_count.times { |i|
+  player = Player.create!(
+    uid: "player_#{i}",
+    name: "#{first_names.sample} #{last_names.sample}",
+    level: rand(1...3),
+    balance: rand(50...100)
     )
 }
