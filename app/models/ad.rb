@@ -3,8 +3,11 @@ class Ad < ApplicationRecord
   belongs_to :product
   before_validation :set_player
   before_validation :set_product
+  before_create :calculate_total
   validate :player_must_have_enough_products,
-           :price_should_be_50percents_max
+           :price_should_be_50percents_max,
+           :check_player_exist,
+           :check_product_exist
 
   def set_player
     @player = Player.find(player_id)
@@ -14,6 +17,14 @@ class Ad < ApplicationRecord
     @product = Product.find(product_id)
   end
 
+  def check_player_exist
+    errors.add(player: "Unknown player") if @product.nil?
+  end
+
+  def check_product_exist
+    errors.add(player: "Unknown product") if @product.nil?
+  end
+  
   def player_must_have_enough_products
     @product_occupied = Ad.where(player_id: @player.id, product_id: @product.id).sum {|p| p[:quantity]}
     @product_in_stock = PlayerProduct.find_by(stock_id: @player.stock.id, product_id: @product.id)
@@ -31,5 +42,9 @@ class Ad < ApplicationRecord
     if price > @product.price * 1.5
       errors.add(:product, "Mark-up can't be more 50%")
     end
+  end
+
+  def calculate_total
+    self.total = self.price * self.quantity
   end
 end
