@@ -1,0 +1,20 @@
+stock_volume: 10
+
+products:
+  mouse:
+    required_level: 1
+    price: 5
+  keyboard:
+    required_level: 1
+    price: 10
+  cell_phone:
+    required_level: 1
+    price: 50
+  laptop:
+    required_level: 2
+    price: 100
+  car:
+    required_level: 3
+    price: 1000
+
+market_players_limit: 5
