@@ -14,5 +14,8 @@ class YmlParser
   def products
     @data['products'] ? @data['products'] : @log.error('Products record not found in config!')
   end
-  
+
+  def stock_volume
+    @data['stock_volume'] ? @data['stock_volume'] : @log.error('Stock Volume record not found in config!')
+  end
 end
