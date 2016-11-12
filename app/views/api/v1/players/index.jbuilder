@@ -1,4 +1,5 @@
 json.players @players do |player|
+	json.id player.id
 	json.name player.name
 	json.uid player.uid
 	json.level player.level
