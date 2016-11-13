@@ -1,24 +1,92 @@
-# README
+##Прототип механики "Рынок"
+**Наполение рынка**
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1. rake db:seed
 
-Things you may want to cover:
+**Описания моделей:**
 
-* Ruby version
+- Product - товар
+- Player - игрок на рынке
+- Stock - склад игрока
+- PlayerProduct - товар принадлежащий игроку
+- Ad - объявление о продаже
+- Deal - Совершенная сделка
 
-* System dependencies
+**Запросы (формат по умолчанию JSON):**
 
-* Configuration
+Просмотреть список игроков
+- `GET localhost:3000/api/v1/players`
 
-* Database creation
+Просмотреть данные об одном игроке
+- `GET localhost:3000/api/v1/players/:id`
 
-* Database initialization
+Просмотреть список товарок находящихся у игрока
+- `GET localhost:3000/api/v1/players/:id/products`
 
-* How to run the test suite
+Посмотреть список прошедших сделок:
+- `GET localhost:3000/api/v1/deals`
 
-* Services (job queues, cache servers, search engines, etc.)
+Просмотреть список объявлений
+- `GET localhost:3000/api/v1/ads`
 
-* Deployment instructions
+Создать объявление
 
-* ...
+- `POST localhost:3000/api/v1/ads`
+```
+{
+	"player_id": 1, 
+	"product_id": 2, 
+	"quantity": 1, 
+	"price": 120
+}
+```
+**Ошибки при создании объявления:**
+- `"player":["must exist","can't be blank"]` - нет информации о игроке на рынке
+- `"product":["must exist","can't be blank"]`  - нет информации о продукте
+- `"product":["Player have not enought products"]` - недостаточное количество свободного товара у игрока на складе, возможно он уже выставлен
+- `"product":["Player have not products in stock"]` - товар отсутствует у игрока на складе
+- `"product":["Discount can't be more 50%"]` - скидка на товар не может быть больше 50%
+- `"product":["Mark-up can't be more 50%"]` - наценка на товар не может быть больше 50%
+- `"product":["Quantity can't be zero"]` - количество товара в объявлении не может быть 0
+- `"player":["Player can't exceed ads limit"]` - игрок не может превысить допустимое количество объявлений
+При успешном создании объявления формируется ответ 
+- `{"content":"Ad successfully created"}`
+
+Совершить сделку 
+- `POST localhost:3000/api/v1/deals`
+```
+{
+	"buyer_id": 1,
+	"ad_id": 3
+}
+```
+**Ошибки при создании сделки:**
+- `"buyer":["must exist","can't be blank"]` - нет информации о покупателе
+- `"error":"Ad not found"` - нет информации об объявлении
+- `"buyer":["Buyer and seller can't pe one person"]` - покупатель и продавец не могут быть одним человеком
+- `"buyer":["Buyer have not enough money"]` - у покупателя недостаточно денег для покупки
+- `"buyer":["Buyer have not enough level"]` - недостаточный уровень для совершения покупки
+- `"buyer":["Buyer have not free space in stock"]` - недостаточно места на складе
+
+**При успешно проведенной сделки формируется ответ:**
+- `{"content":"Deal successfully created"}`
+
+После успешно проведенной сделки объявление удаляется. 
+
+**Система рассчета опыта:**
+
+После проведения сделки у покупателя и продавца увеличивается полученный опыт, при достижении необходимого опыта игрок переходит на новый уровень и может покупать либо продавать ранее недоступные товары. Соотношение опыта и уровня рассчитывается по формуле:
+
+`(Math.log2(experience / 100) + 1).floor`
+
+Таким образом уровню 1 соответствует 100 опыта, 2 - 200, 3 - 400, 4 - 800 и т.д. Соответственно, совершая сделки игроки прокачиваются
+
+**Логика для автоматической продажи:**
+- `rake bot:sell` - пытается создаеть случайное объявление
+- `rake bot:buy` - пытается совершить покупку случайным игроком товаров по случайному объявлению
+
+Ошибки записываются в лог-файлы `'log/bot_buy.log'` и `'log/bot_buy.log'`
+
+
+
+
