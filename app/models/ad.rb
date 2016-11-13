@@ -22,11 +22,11 @@ class Ad < ApplicationRecord
     @product_occupied = Ad.where(player_id: player.id, product_id: product.id).sum {|p| p[:quantity]}
     @product_in_stock = PlayerProduct.find_by(stock_id: player.stock.id, product_id: product.id)
     if @product_in_stock.nil? 
-      errors.add(:product, "Player have not products in stock")
+      errors.add(:product, 'Player have not products in stock')
     else
         @product_free = @product_in_stock.amount - @product_occupied
       if @product_free <= 0 || @product_in_stock.amount < quantity
-        errors.add(:product, "Player have not enought products")
+        errors.add(:product, 'Player have not enought products')
       end
     end
   end

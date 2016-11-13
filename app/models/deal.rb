@@ -16,15 +16,15 @@ class Deal < ApplicationRecord
   end
 
   def buyer_have_enough_money
-    errors.add(:buyer, "Buyer have not enough money") if (@buyer.balance < total)
+    errors.add(:buyer, 'Buyer have not enough money') if (@buyer.balance < total)
   end
 
   def buyer_have_enough_level
-    errors.add(:buyer, "Buyer have not enough level") if (@buyer.level < @product.required_level)
+    errors.add(:buyer, 'Buyer have not enough level') if (@buyer.level < @product.required_level)
   end
 
   def buyer_have_enough_free_space
-    errors.add(:buyer, "Buyer have not free space in stock") if (@buyer.stock.free_space < quantity)
+    errors.add(:buyer, 'Buyer have not free space in stock') if (@buyer.stock.free_space < quantity)
   end
 
   def buyer_cant_be_seller
@@ -49,15 +49,15 @@ class Deal < ApplicationRecord
 
     @seller_product = PlayerProduct.find_by(stock_id: @seller.stock.id, product_id: @product.id)
     @seller_product.amount -= quantity
-    if @seller_product.amount == 0
+    if @seller_product.amount.zero?
       PlayerProduct.destroy(@seller_product) 
     else
-      @seller_product.save 
+      @seller_product.save
     end
 
     def update_players_exp
-      @buyer.experience += 2 ** @product.required_level * quantity * 10
-      @seller.experience += 2 ** @product.required_level * quantity * 10
+      @buyer.experience += 2**@product.required_level * quantity * 10
+      @seller.experience += 2**@product.required_level * quantity * 10
       @seller.level = (Math.log2(@seller.experience / 100) + 1).floor
       @buyer.level = (Math.log2(@buyer.experience / 100) + 1).floor
       @buyer.save
