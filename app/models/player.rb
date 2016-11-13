@@ -1,7 +1,9 @@
 class Player < ApplicationRecord
   has_one :stock
   has_many :ads
-  
+  has_many :purchases, :class_name => 'Deal', :foreign_key => 'buyer_id'
+  has_many :deals, :class_name => 'Deal', :foreign_key => 'seller_id'
+
   before_create :exp_calculate
   after_create :prepare
 

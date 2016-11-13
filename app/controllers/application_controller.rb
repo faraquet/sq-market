@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   private
 
   def check_request_format
-    (render status: 406, json: { error: "Format should be JSON" }) if request.format != :json
+    (render status: 406, json: { error: "Format must be JSON" }) if request.format != :json
   end
   
 end

@@ -9,17 +9,13 @@ class Api::V1::DealsController < ApplicationController
   end
 
   def create
-    @buyer = Player.find_by(id: params[:buyer_id])
     @ad = Ad.find_by(id: params[:ad_id])
-
-    @deal = Deal.new(
-      seller_id: @ad.player_id, 
-      buyer_id: deal_params[:buyer_id], 
-      product_id: @ad.product_id,
-      quantity: @ad.quantity,
-      price: @ad.price,
-      total: @ad.total
-      )
+    if @ad.nil?
+      render status: 404, json: { content: "Ad not found" }
+      #binding.pry
+    end
+    @deal = Deal.new(seller_id: @ad.player_id, buyer_id: deal_params[:buyer_id], 
+        product_id: @ad.product_id, quantity: @ad.quantity, price: @ad.price, total: @ad.total)
     
     if !@deal.valid?
       render status: 400, json: { content: "Deal can't be created", errors: @deal.errors }
