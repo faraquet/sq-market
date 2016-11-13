@@ -9,7 +9,8 @@ class Api::V1::DealsController < ApplicationController
   end
 
   def create
-    @ad = Ad.find(params[:ad_id])
+    @buyer = Player.find_by(id: params[:buyer_id])
+    @ad = Ad.find_by(id: params[:ad_id])
 
     @deal = Deal.new(
       seller_id: @ad.player_id, 

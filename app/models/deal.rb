@@ -1,29 +1,29 @@
 class Deal < ApplicationRecord
   belongs_to :product
   before_validation :set_players
-  
-  validate :buyer_must_have_enough_money,
-           :buyer_must_have_enough_level,
-           :buyer_must_have_enough_free_space,
+
+  validate :buyer_have_enough_money,
+           :buyer_have_enough_level,
+           :buyer_have_enough_free_space,
            :buyer_cant_be_seller
 
   after_save :update_players_balance, :update_players_products, :update_players_exp
 
   def set_players
-    @seller = Player.find(seller_id)
-    @buyer = Player.find(buyer_id)
-    @product = Product.find(product_id)
+    @seller = Player.find_by(id: seller_id)
+    @buyer = Player.find_by(id: buyer_id)
+    @product = Product.find_by(id: product_id)
   end
 
-  def buyer_must_have_enough_money
+  def buyer_have_enough_money
     errors.add(:buyer, "Buyer have not enough money") if (@buyer.balance < total)
   end
 
-  def buyer_must_have_enough_level
+  def buyer_have_enough_level
     errors.add(:buyer, "Buyer have not enough level") if (@buyer.level < @product.required_level)
   end
 
-  def buyer_must_have_enough_free_space
+  def buyer_have_enough_free_space
     errors.add(:buyer, "Buyer have not free space in stock") if (@buyer.stock.free_space < quantity)
   end
 

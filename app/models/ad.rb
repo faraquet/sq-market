@@ -6,8 +6,8 @@ class Ad < ApplicationRecord
   validates :player, presence: true
   validates :product, presence: true
 
-  validate :player_must_have_enough_products, 
-           :price_should_be_50percents_max, 
+  validate :player_have_enough_products, 
+           :price_in_50percents_range, 
            :player_have_ads_limit,
            :quantity_can_not_be_zero,
            if: 'player_and_product_present?'
@@ -18,7 +18,7 @@ class Ad < ApplicationRecord
     player.present? && product.present?
   end
 
-  def player_must_have_enough_products
+  def player_have_enough_products
     @product_occupied = Ad.where(player_id: player.id, product_id: product.id).sum {|p| p[:quantity]}
     @product_in_stock = PlayerProduct.find_by(stock_id: player.stock.id, product_id: product.id)
     if @product_in_stock.nil? 
@@ -31,7 +31,7 @@ class Ad < ApplicationRecord
     end
   end
 
-  def price_should_be_50percents_max
+  def price_in_50percents_range
     if (product.price * 1.5) < price
       errors.add(:product, "Mark-up can't be more 50%")
     elsif (product.price * 0.5) > price
