@@ -11,7 +11,7 @@ class Deal < ApplicationRecord
            :buyer_have_enough_level,
            :buyer_have_enough_free_space,
            :buyer_cant_be_seller,
-           if: 'players_present?'
+           if: :players_present?
 
   after_save :update_players_balance, :update_players_products, :update_players_exp
   

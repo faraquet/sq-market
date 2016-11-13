@@ -10,7 +10,7 @@ class Ad < ApplicationRecord
            :price_in_50percents_range, 
            :player_have_ads_limit,
            :quantity_can_not_be_zero,
-           if: 'player_and_product_present?'
+           if: :player_and_product_present?
 
   before_create :calculate_total
   
