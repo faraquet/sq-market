@@ -10,10 +10,7 @@ class Api::V1::DealsController < ApplicationController
 
   def create
     @ad = Ad.find_by(id: params[:ad_id])
-    if @ad.nil?
-      render status: 404, json: { content: "Ad not found" }
-      #binding.pry
-    end
+    return render status: 404, json: { content: "Ad not found" } if @ad.nil?
     @deal = Deal.new(seller_id: @ad.player_id, buyer_id: deal_params[:buyer_id], 
         product_id: @ad.product_id, quantity: @ad.quantity, price: @ad.price, total: @ad.total)
     
