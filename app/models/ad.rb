@@ -6,28 +6,20 @@ class Ad < ApplicationRecord
   before_validation :set_player, :set_product
   
   validate :player_must_have_enough_products,
-           :price_should_be_50percents_max,
-           :check_player_exist,
-           :check_product_exist
+           :price_should_be_50percents_max
 
   before_create :calculate_total
   
   def set_player
     @player = Player.find(player_id)
+    errors.add(:player, "Unknown player") if @player.nil?
   end
 
   def set_product
     @product = Product.find(product_id)
+    errors.add(:product, "Unknown product") if @product.nil?
   end
 
-  def check_player_exist
-    errors.add(player: "Unknown player") if @product.nil?
-  end
-
-  def check_product_exist
-    errors.add(player: "Unknown product") if @product.nil?
-  end
-  
   def player_must_have_enough_products
     @product_occupied = Ad.where(player_id: @player.id, product_id: @product.id).sum {|p| p[:quantity]}
     @product_in_stock = PlayerProduct.find_by(stock_id: @player.stock.id, product_id: @product.id)
@@ -35,7 +27,7 @@ class Ad < ApplicationRecord
       errors.add(:product, "Player have not products in stock")
     else
         @product_free = @product_in_stock.amount - @product_occupied
-      if @product_free <= 0
+      if @product_free <= 0 || @product_in_stock.amount < quantity
         errors.add(:product, "Player have not enought products")
       end
     end
