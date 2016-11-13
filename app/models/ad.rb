@@ -3,10 +3,11 @@ class Ad < ApplicationRecord
   belongs_to :product
   has_one :deal
 
-  before_validation :set_player, :set_product
+  before_validation :set_player, :set_product 
   
   validate :player_must_have_enough_products,
-           :price_should_be_50percents_max
+           :price_should_be_50percents_max,
+           :player_have_ads_limit
 
   before_create :calculate_total
   
@@ -37,6 +38,12 @@ class Ad < ApplicationRecord
     if price > @product.price * 1.5
       errors.add(:product, "Mark-up can't be more 50%")
     end
+  end
+
+  def player_have_ads_limit
+    limit = YmlParser.new.market_ads_limit
+    players_ads_quantity = Ad.where(player_id: @player.id).count
+    errors.add(:player, "Player can't exceed ads limit") if limit <= players_ads_quantity
   end
 
   def calculate_total

@@ -18,4 +18,8 @@ class YmlParser
   def stock_volume
     @data['stock_volume'] ? @data['stock_volume'] : @log.error('Stock Volume record not found in config!')
   end
+
+  def market_ads_limit
+    @data['market_ads_limit'] ? @data['market_ads_limit'] : @log.error('Ads limit record not found in config!')
+  end
 end

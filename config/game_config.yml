@@ -17,4 +17,4 @@ products:
     required_level: 3
     price: 1000
 
-market_players_limit: 5
+market_ads_limit: 5
