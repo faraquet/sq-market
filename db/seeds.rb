@@ -1,6 +1,6 @@
 first_names = ["Andy", "Max", "John", "George", "Oliver", "Jack"]
 last_names  = ["Smith", "Hill", "Adams", "Baker", "Davis", "Bowie"]
-players_count = 5
+players_count = 12
 
 Deal.delete_all
 Ad.delete_all
@@ -25,6 +25,6 @@ players_count.times { |i|
     uid: "player_#{i}",
     name: "#{first_names.sample} #{last_names.sample}",
     level: rand(1...3),
-    balance: rand(50...100)
+    balance: rand(50...200)
     )
 }
