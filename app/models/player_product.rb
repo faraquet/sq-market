@@ -5,7 +5,7 @@ class PlayerProduct < ApplicationRecord
   before_validation :set_stock
 
   after_save :set_stock_free_space
-
+  after_destroy :set_stock_free_space
   def set_stock
     @stock = self.stock
   end

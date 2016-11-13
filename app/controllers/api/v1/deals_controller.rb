@@ -24,8 +24,10 @@ class Api::V1::DealsController < ApplicationController
       render status: 400, json: { content: "Deal can't be created", errors: @deal.errors }
     else
       @deal.save
+      Ad.destroy(@ad)
       render status: 200, json: { content: "Deal successfully created" }
     end
+
   end
 
   private    
@@ -35,10 +37,6 @@ class Api::V1::DealsController < ApplicationController
   end
 
   def deal_params
-    # puts params.map {|key, value| 
-    #   puts key
-    #   puts value
-    # }
     params.require(:deal).permit(:buyer_id, :ad_id) 
   end
 end

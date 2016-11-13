@@ -6,7 +6,7 @@ class Player < ApplicationRecord
   after_create :prepare
 
   def exp_calculate
-    self.experience = 2 ** self.level * 100
+    self.experience = 2 ** (self.level - 1) * 100
   end
 
   def prepare
