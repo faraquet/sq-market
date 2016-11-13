@@ -5,4 +5,5 @@ class Stock < ApplicationRecord
   def load_config
     self.volume = YmlParser.new.stock_volume
   end
+
 end

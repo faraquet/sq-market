@@ -10,6 +10,7 @@ class Api::V1::PlayersController < ApplicationController
   def show_products
     player = Player.find(params[:player_id])
     @player_products = PlayerProduct.where(stock_id: player.stock.id)
+    @stock = player.stock
   end
 
   private 
