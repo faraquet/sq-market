@@ -6,7 +6,7 @@ class Deal < ApplicationRecord
            :buyer_must_have_enough_free_space,
            :buyer_cant_be_seller
 
-  after_save :update_players_balance, :update_players_products
+  after_save :update_players_balance, :update_players_products, :update_players_exp
 
   def set_players
     @seller = Player.find(seller_id)
@@ -32,7 +32,7 @@ class Deal < ApplicationRecord
 
   def update_players_balance
     @buyer.balance -= total
-    @seller.balance -= total
+    @seller.balance += total
     @buyer.save
     @seller.save
   end
@@ -52,6 +52,15 @@ class Deal < ApplicationRecord
       PlayerProduct.destroy(@seller_product) 
     else
       @seller_product.save 
+    end
+
+    def update_players_exp
+      @buyer.experience += 2 ** @product.required_level * quantity * 10
+      @seller.experience += 2 ** @product.required_level * quantity * 10
+      @seller.level = (Math.log2(@seller.experience / 100) + 1).to_i
+      @buyer.level = (Math.log2(@buyer.experience / 100) + 1).to_i
+      @buyer.save
+      @seller.save
     end
   end
 end
