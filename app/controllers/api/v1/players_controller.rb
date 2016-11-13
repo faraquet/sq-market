@@ -7,7 +7,7 @@ class Api::V1::PlayersController < ApplicationController
   def show
   end
   
-  def show_products
+  def products
     player = Player.find(params[:player_id])
     @player_products = PlayerProduct.where(stock_id: player.stock.id)
     @stock = player.stock

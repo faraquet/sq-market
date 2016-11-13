@@ -1,6 +1,7 @@
 class Deal < ApplicationRecord
   belongs_to :product
   before_validation :set_players
+  
   validate :buyer_must_have_enough_money,
            :buyer_must_have_enough_level,
            :buyer_must_have_enough_free_space,
@@ -57,8 +58,8 @@ class Deal < ApplicationRecord
     def update_players_exp
       @buyer.experience += 2 ** @product.required_level * quantity * 10
       @seller.experience += 2 ** @product.required_level * quantity * 10
-      @seller.level = (Math.log2(@seller.experience / 100) + 1).to_i
-      @buyer.level = (Math.log2(@buyer.experience / 100) + 1).to_i
+      @seller.level = (Math.log2(@seller.experience / 100) + 1).floor
+      @buyer.level = (Math.log2(@buyer.experience / 100) + 1).floor
       @buyer.save
       @seller.save
     end
